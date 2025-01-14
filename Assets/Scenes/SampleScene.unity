@@ -171,6 +171,33 @@ MonoBehaviour:
   cam: {fileID: 963194227}
   xSensitivity: 30
   ySensitivity: 30
+--- !u!54 &20638988
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20638977}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &34753019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1625,6 +1652,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2915473216595161633, guid: 87d3b2bd340526749a936b10be8ceb69, type: 3}
       insertIndex: -1
       addedObject: {fileID: 20638984}
+    - targetCorrespondingSourceObject: {fileID: 2915473216595161633, guid: 87d3b2bd340526749a936b10be8ceb69, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 20638988}
   m_SourcePrefab: {fileID: 100100000, guid: 87d3b2bd340526749a936b10be8ceb69, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
