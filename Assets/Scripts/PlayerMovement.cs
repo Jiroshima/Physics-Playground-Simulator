@@ -1,13 +1,7 @@
-using System.Numerics;
-using Unity.VisualScripting;
 using UnityEngine;
-using Vector3 = UnityEngine.Vector3;
-using Vector2 = UnityEngine.Vector3;
-using UnityEngine.TextCore.Text;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     private CharacterController controller;
     public float speed = 12f;
     public float gravity = -9.81f * 2;
@@ -18,11 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundMask;
 
     Vector3 velocity; 
-
     bool isGrounded;
 
-    private Vector3 lastPosition = new Vector3(0f,0f,0f);
-    
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -30,36 +21,35 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Checks if player is grounded
+        // Check if the player is grounded
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        // Reset the default velocity
-        if(isGrounded && velocity.y < 0)
+
+        // Reset vertical velocity when grounded
+        if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
-        // get inputs
+
+        // Get input for horizontal movement
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        // Create the moving vector
-        Vector3 move = transform.right * x + transform.forward * z; // right is the x axis forward is the z axis
+        // Calculate movement direction relative to player orientation
+        Vector3 move = transform.right * x + transform.forward * z;
 
-        // Move the player
+        // Move the player horizontally
         controller.Move(move * speed * Time.deltaTime);
 
-        // check if player can jump
+        // Handle jumping
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            // Actually jumping
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        // Falling Down
+        // Apply gravity
         velocity.y += gravity * Time.deltaTime;
 
-        // Execute the jump
-        controller.Move(velocity * Time.deltaTime);
-
+        // Move the player vertically
+        controller.Move(new Vector3(0, velocity.y, 0) * Time.deltaTime);
     }
 }
-
