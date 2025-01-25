@@ -16,7 +16,7 @@ MonoBehaviour:
     supportShadowMask: 1
     supportSSR: 0
     supportSSRTransparent: 0
-    supportSSAO: 1
+    supportSSAO: 0
     supportSSGI: 0
     supportSubsurfaceScattering: 1
     sssSampleBudget:
@@ -27,7 +27,7 @@ MonoBehaviour:
       m_Values: 000000000000000000000000
       m_SchemaId:
         m_Id: With3Levels
-    supportVolumetrics: 1
+    supportVolumetrics: 0
     supportVolumetricClouds: 0
     supportLightLayers: 0
     renderingLayerMaskBuffer: 0
@@ -68,14 +68,14 @@ MonoBehaviour:
     highQualityLineRenderingMemoryBudget: 128
     msaaSampleCount: 1
     supportMotionVectors: 1
-    supportScreenSpaceLensFlare: 1
-    supportDataDrivenLensFlare: 1
+    supportScreenSpaceLensFlare: 0
+    supportDataDrivenLensFlare: 0
     supportDitheringCrossFade: 0
     supportRuntimeAOVAPI: 0
     supportTerrainHole: 0
     lightProbeSystem: 1
     oldLightProbeSystem: 0
-    probeVolumeMemoryBudget: 1024
+    probeVolumeMemoryBudget: 512
     supportProbeVolumeGPUStreaming: 0
     supportProbeVolumeDiskStreaming: 0
     probeVolumeSHBands: 1
@@ -100,7 +100,7 @@ MonoBehaviour:
       reflectionProbeTexLastValidCubeMip: 3
       reflectionProbeTexLastValidPlanarMip: 0
       reflectionProbeDecreaseResToFit: 1
-      skyReflectionSize: 256
+      skyReflectionSize: 128
       skyLightingOverrideLayerMask:
         serializedVersion: 2
         m_Bits: 0
@@ -115,10 +115,10 @@ MonoBehaviour:
       maxLocalVolumetricFogSize: 0
       maxLocalVolumetricFogOnScreen: 256
     hdShadowInitParams:
-      maxShadowRequests: 128
+      maxShadowRequests: 75
       directionalShadowsDepthBits: 32
-      punctualShadowFilteringQuality: 1
-      directionalShadowFilteringQuality: 1
+      punctualShadowFilteringQuality: 0
+      directionalShadowFilteringQuality: 0
       areaShadowFilteringQuality: 0
       punctualLightShadowAtlas:
         shadowAtlasResolution: 4096
@@ -143,8 +143,8 @@ MonoBehaviour:
         m_Values: 00010000000200000004000000080000
         m_SchemaId:
           m_Id: With4Levels
-      maxDirectionalShadowMapResolution: 2048
-      maxPunctualShadowMapResolution: 2048
+      maxDirectionalShadowMapResolution: 1024
+      maxPunctualShadowMapResolution: 1024
       maxAreaShadowMapResolution: 2048
       supportScreenSpaceShadows: 0
       maxScreenSpaceShadowSlots: 4
@@ -203,12 +203,12 @@ MonoBehaviour:
     postProcessQualitySettings:
       NearBlurSampleCount: 030000000500000008000000
       NearBlurMaxRadius:
-      - 2
+      - 0
       - 4
       - 7
-      FarBlurSampleCount: 04000000070000000e000000
+      FarBlurSampleCount: 03000000070000000e000000
       FarBlurMaxRadius:
-      - 5
+      - 0
       - 8
       - 13
       DoFResolution: 040000000200000001000000
@@ -219,14 +219,14 @@ MonoBehaviour:
       - 0.75
       - 2
       LimitManualRangeNearBlur: 000000
-      MotionBlurSampleCount: 04000000080000000c000000
+      MotionBlurSampleCount: 02000000080000000c000000
       BloomRes: 040000000200000002000000
       BloomHighQualityFiltering: 000101
       BloomHighQualityPrefiltering: 000001
       ChromaticAberrationMaxSamples: 03000000060000000c000000
     lightSettings:
       useContactShadow:
-        m_Values: 000001
+        m_Values: 010001
         m_SchemaId:
           m_Id: With3Levels
     maximumLODLevel:
@@ -335,8 +335,8 @@ MonoBehaviour:
     m_ObsoleteSupportRuntimeDebugDisplay: 0
   allowShaderVariantStripping: 1
   enableSRPBatcher: 1
-  availableMaterialQualityLevels: -1
-  m_DefaultMaterialQualityLevel: 4
+  availableMaterialQualityLevels: 1
+  m_DefaultMaterialQualityLevel: 1
   diffusionProfileSettings: {fileID: 0}
   m_VolumeProfile: {fileID: 0}
   virtualTexturingSettings:
