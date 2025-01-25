@@ -1,27 +1,31 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+/// <summary>
+/// The script is to manage the different spawn points for 'Play' and 'Start Tutorial' 
+/// </summary>
+/// 
 public class MainGameManager : MonoBehaviour
 {
-    public Transform mainAreaSpawn;     // Reference to the Main Area spawn point
-    public Transform tutorialAreaSpawn; // Reference to the Tutorial Area spawn point
-    public GameObject player;           // Reference to the player object
-    public PlayerMovement playerMovementScript; // Reference to the PlayerMovement script
-
-    private bool isGamePaused = false;  // Flag to check if the game is paused
+    public Transform mainAreaSpawn;     // main area spawn point 
+    public Transform tutorialAreaSpawn; //  tutorial area spawn point 
+    public GameObject player;           // Player gameobject
+    public PlayerMovement playerMovementScript; // PlayerMovementScript (needed for resetting playermovement as it glitches out when going in an out of the main menu )
+    private bool isGamePaused = false;  // check if game is paused 
 
     void Start()
     {
-        // Ensure player movement is enabled when the game starts
+        // check that player movement is enabled when the game begins 
         if (playerMovementScript != null)
         {
-            playerMovementScript.enabled = true;  // Enable movement if not already enabled
+            playerMovementScript.enabled = true;  // enable if not 
         }
 
-        // Retrieve spawn area from PlayerPrefs (defaults to "MainArea" if not set)
+        // retrieve the spawn area preference from Playerprefs - defaults to mainArea if not set 
         string spawnArea = PlayerPrefs.GetString("SpawnArea", "MainArea");
 
-        // Determine the spawn area and set the player position and rotation accordingly
+        // set player position and rotation based on the selected spawn area 
         if (spawnArea == "MainArea" && mainAreaSpawn != null)
         {
             player.transform.position = mainAreaSpawn.position;
@@ -36,7 +40,7 @@ public class MainGameManager : MonoBehaviour
 
     void Update()
     {
-        // Check for Escape key press to pause or go to the main menu
+        // checks if escape key is press to go back to the main menu 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isGamePaused)
@@ -50,46 +54,46 @@ public class MainGameManager : MonoBehaviour
         }
     }
 
-    // Function to resume the game (unpause)
+    // Function to resume the game 
     private void ResumeGame()
     {
-        Time.timeScale = 1f; // Resumes time in the game
-        isGamePaused = false; // Set the paused state to false
+        Time.timeScale = 1f; // resume game time 
+        isGamePaused = false; // unpause game 
 
-        // Enable player movement
+        // enable player movement if it is disabled
         if (playerMovementScript != null)
         {
             playerMovementScript.enabled = true;
         }
     }
 
-    // Function to pause the game and go to the main menu
+    // pauses the game and goes back to the main menu 
     private void GoToMainMenu()
     {
-        // Pause the game by stopping player movement and freezing time
+        // pause the game by stopping player movement and freezing time 
         Time.timeScale = 0f;
-        isGamePaused = true; // Set the paused state to true
+        isGamePaused = true; // set paused state to true 
 
-        // Disable player movement
+        // disable the player movement 
         if (playerMovementScript != null)
         {
             playerMovementScript.enabled = false;
         }
 
-        // Set PlayerPrefs to default spawn area (MainArea)
+        // set the default spawn area to MainArea
         PlayerPrefs.SetString("SpawnArea", "MainArea");
 
-        // Load the Main Menu scene
+        // load the MainMenu Scene 
         SceneManager.LoadScene("MainMenu");
     }
 
-    // This method will be called when the game is resumed from the Main Menu
+    // call this method when the game is resumed from the main menu 
     public void StartNewGame(string spawnArea)
     {
-        // Set the spawn area to either MainArea or TutorialArea
+        // save the chosen spawn area
         PlayerPrefs.SetString("SpawnArea", spawnArea);
 
-        // Load the Main Game scene
+        // load the Main Game scene
         SceneManager.LoadScene("MainGame");
     }
 }

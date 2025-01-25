@@ -1,32 +1,38 @@
 using UnityEngine;
 
+
+// Attach a collision sound to the child objects of GameObjects
+
 public class AttachCollisionSound : MonoBehaviour
 {
+    // this is the audio that we will assign 
     [SerializeField] 
-    private AudioClip collisionSound;  // Sound to play on collision for all children
+    private AudioClip collisionSound;  
 
     private void Start()
     {
-        // Get the parent GameObject (MapObjects) that contains all of the objects
-        GameObject mapObjectsParent = this.gameObject;  // Assuming this script is attached to the MapObjects parent object
+        // get the parent GameObject 
+        GameObject mapObjectsParent = this.gameObject;  // assume the script is attached to the parent object 
 
-        // Check if the parent object exists
+        // checks if the parent object exists 
         if (mapObjectsParent != null)
         {
-            // Loop through all child objects of the MapObjects parent
+            // loop through all the child objects of the parent 
             foreach (Transform child in mapObjectsParent.transform)
             {
-                // Check if the child has a Collider component
+               // check if the child has a collider component 
                 if (child.GetComponent<Collider>() != null)
                 {
-                    // Add the CollisionSound script to the child object if not already added
+                    // try  to get the collisionSound script on the child object 
                     CollisionSound collisionSoundScript = child.GetComponent<CollisionSound>();
+
+                    // if its not attached then add it 
                     if (collisionSoundScript == null)
                     {
                         collisionSoundScript = child.gameObject.AddComponent<CollisionSound>();
                     }
 
-                    // Assign the collision sound to the CollisionSound script
+                    // assign the collision sound to the collision script 
                     collisionSoundScript.SetCollisionSound(collisionSound);
                 }
             }

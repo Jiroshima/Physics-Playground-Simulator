@@ -1,18 +1,24 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+/// <summary>
+/// for handling the main menu functions 
+/// </summary>
+/// 
 public class MainMenu : MonoBehaviour
 {
     private void Start()
     {
-        // Ensures the game time is running when the main menu scene loads
+        // this ensures that the game time is running normally when the main menu scene loads
         Time.timeScale = 1f;
 
-        // Unlocks and shows the cursor
+        // shows cursor and unlocks it 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
+    // Start the game in the main area by setting the correct spawn point 
     public void PlayMainArea()
     {
         PlayerPrefs.SetString("SpawnArea", "MainArea"); // store main spawn area 

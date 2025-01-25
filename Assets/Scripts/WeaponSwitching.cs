@@ -1,85 +1,110 @@
 using UnityEngine;
 
+/// <summary>
+/// Script which allows player to switch between the different weapons 
+/// </summary>
 public class WeaponSwitching : MonoBehaviour
 {
-    // References
+    // array of weapon transforms to manage multiple weapons in the player's inventory
+    // SerializeField allows private variables to be set in the Unity Inspector
     [SerializeField] private Transform[] weapons;
-    [SerializeField] private GameObject[] weaponHUDs; // An array for multiple weapon HUDs
 
-    // Keys
+    // array of HUD GameObjects corresponding to each weapon
+    [SerializeField] private GameObject[] weaponHUDs;
+
+    // array of KeyCodes to define which keys trigger weapon switching
     [SerializeField] private KeyCode[] keys;
 
-    // Settings
-    [SerializeField] private float switchTime = 0.5f;  // Minimum switch time to prevent spamming
+    // delay to prevent rapid-weapon switching
+    [SerializeField] private float switchTime = 0.5f;
 
-    private int selectedWeapon = 0;  // Start with the first weapon selected
+    // tracks the currently selected weapon index
+    // and initializes to 0 (first weapon in the array)
+    private int selectedWeapon = 0;
+
+    // tracks time elapsed since the last weapon switch
     private float timeSinceLastSwitch = 0f;
 
     private void Start()
     {
-        if (weapons.Length == 0 || weaponHUDs.Length == 0) return; // Early exit if setup is invalid
+        //check to prevent errors if no weapons are assigned
+        if (weapons.Length == 0 || weaponHUDs.Length == 0) return;
 
+        // initial setup of weapons and their visibility
         SetWeapons();
-        Select(selectedWeapon);  // Initial weapon selection
+
+        // select the first weapon by default
+        Select(selectedWeapon);
     }
 
     private void SetWeapons()
     {
-        // Ensure that the size of the keys array matches the number of weapons
+        // check if the keys array matches the number of weapons
         if (keys.Length != weapons.Length)
         {
             keys = new KeyCode[weapons.Length];
         }
 
-        // Initialize the weapons and HUDs
+        // initialize all weapons and their HUDs to be invisible
         for (int i = 0; i < weapons.Length; i++)
         {
-            weapons[i].gameObject.SetActive(false);  // Disable all weapons initially
+            weapons[i].gameObject.SetActive(false);
+
+            // only deactivate the HUDs if there are enough defined
             if (i < weaponHUDs.Length)
             {
-                weaponHUDs[i].SetActive(false);  // Disable all HUDs initially
+                weaponHUDs[i].SetActive(false);
             }
         }
     }
 
     private void Update()
     {
-        timeSinceLastSwitch += Time.deltaTime;  // Track time since the last switch
+        // increment the time since last weapon switch
+        timeSinceLastSwitch += Time.deltaTime;
 
-        // Loop through the keys to check if one is pressed and switch the weapon
+        // check for weapon switch input
         for (int i = 0; i < keys.Length; i++)
         {
+            // only switch if the corresponding key is pressed 
+            // and if enough time has passed since the last switch
             if (Input.GetKeyDown(keys[i]) && timeSinceLastSwitch >= switchTime)
             {
-                selectedWeapon = i;  // Switch to the pressed weapon
-                timeSinceLastSwitch = 0f;  // Reset switch timer
+                // update the selected weapon to the index of the pressed key
+                selectedWeapon = i;
+
+                // reset the timer for cooldown
+                timeSinceLastSwitch = 0f;
             }
         }
-
-        // Update weapon if needed
+        // ensure the correct weapon is selected and displayed
         Select(selectedWeapon);
     }
 
     private void Select(int weaponIndex)
     {
-        // Only change if the weapon index has actually changed
+        // only change if the weapon is not already active
         if (weapons[weaponIndex].gameObject.activeSelf) return;
 
-        // Deactivate all weapons and HUDs first
+        // deactivate all weapons and their corresponding HUDs
         for (int i = 0; i < weapons.Length; i++)
         {
             weapons[i].gameObject.SetActive(false);
+
+            // only deactivate HUDs if there are enough defined
             if (i < weaponHUDs.Length)
             {
                 weaponHUDs[i].SetActive(false);
             }
         }
 
-        // Activate the selected weapon and its HUD
+        // activate the selected weapon
         weapons[weaponIndex].gameObject.SetActive(true);
+
+        // activate the corresponding weapon HUD if available
         if (weaponIndex < weaponHUDs.Length)
         {
-            weaponHUDs[weaponIndex].SetActive(true);  // Show the correct HUD
+            weaponHUDs[weaponIndex].SetActive(true);
         }
     }
 }

@@ -1,4 +1,7 @@
 using UnityEngine;
+/// <summary>
+/// Rotates the blades of the turbines
+/// </summary>
 
 public class FanRotation : MonoBehaviour
 {
