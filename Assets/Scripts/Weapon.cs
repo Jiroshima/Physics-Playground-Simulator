@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class Weapon : MonoBehaviour
@@ -54,10 +53,17 @@ public class Weapon : MonoBehaviour
     public TextMeshProUGUI angleText;
     public TextMeshProUGUI sizeText;
 
+    // AudioSource and Shooting Sound
+    private AudioSource audioSource;
+    public AudioClip shootingSound; // The sound to play when shooting
+
     private void Awake()
     {
         readyToShoot = true;
         burstBulletsLeft = bulletsPerBurst;
+
+        // Initialize AudioSource component
+        audioSource = GetComponent<AudioSource>();
 
         // Initialize UI texts
         UpdateUI();
@@ -135,10 +141,17 @@ public class Weapon : MonoBehaviour
         Vector3 shootingDirection = CalculateDirection().normalized;
         shootingDirection = Quaternion.Euler(currentAngle, 0, 0) * shootingDirection;
 
+        // Instantiate the bullet
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
         bullet.transform.localScale = Vector3.one * currentSize;
         bullet.transform.forward = shootingDirection;
         bullet.GetComponent<Rigidbody>().AddForce(shootingDirection * currentVelocity, ForceMode.Impulse);
+
+        // Play shooting sound when the weapon fires
+        if (audioSource != null && shootingSound != null)
+        {
+            audioSource.PlayOneShot(shootingSound);
+        }
 
         if (allowReset)
         {

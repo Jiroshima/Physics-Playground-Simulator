@@ -14,9 +14,26 @@ public class PlayerMovement : MonoBehaviour
     Vector3 velocity; 
     bool isGrounded;
 
+    // AudioSource for SFX
+    private AudioSource walkingAudioSource;
+    private AudioSource jumpAudioSource;
+
+    // Public variables for sound effects
+    public AudioClip walkingSound; // Footstep sound
+    public AudioClip jumpSound;    // Jump sound
+    private bool isWalking;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        
+        // Create two separate AudioSources: one for walking, one for jumping
+        walkingAudioSource = gameObject.AddComponent<AudioSource>();
+        jumpAudioSource = gameObject.AddComponent<AudioSource>();
+
+        // Set the walking audio source to loop for continuous walking sound
+        walkingAudioSource.loop = true;
+        walkingAudioSource.spatialBlend = 1f; // Optional: Set to 3D if needed
     }
 
     void Update()
@@ -37,6 +54,25 @@ public class PlayerMovement : MonoBehaviour
         // Calculate movement direction relative to player orientation
         Vector3 move = transform.right * x + transform.forward * z;
 
+        // Check if player is moving (walking)
+        if (move.magnitude > 0f && isGrounded)
+        {
+            if (!isWalking) // Play walking sound if the player starts walking
+            {
+                isWalking = true;
+                walkingAudioSource.clip = walkingSound;
+                walkingAudioSource.Play();
+            }
+        }
+        else
+        {
+            if (isWalking) // Stop walking sound if the player stops
+            {
+                isWalking = false;
+                walkingAudioSource.Stop();
+            }
+        }
+
         // Move the player horizontally
         controller.Move(move * speed * Time.deltaTime);
 
@@ -44,6 +80,8 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            // Play jump sound when jumping
+            jumpAudioSource.PlayOneShot(jumpSound);
         }
 
         // Apply gravity

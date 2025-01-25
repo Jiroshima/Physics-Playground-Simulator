@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PhysGun : MonoBehaviour
@@ -12,6 +11,10 @@ public class PhysGun : MonoBehaviour
     private LineRenderer _pickLine;
     [SerializeField]
     private Transform _barrelPoint;
+
+    // New variables for sound
+    public AudioClip grabSound;  // The sound to play when grabbing an object
+    private AudioSource audioSource;  // AudioSource component to play the sound
 
     private Rigidbody _grabbedObject;
     private float _pickDistance;
@@ -35,15 +38,20 @@ public class PhysGun : MonoBehaviour
             _pickLine.useWorldSpace = true;
             _pickLine.gameObject.SetActive(false);
         }
+
+        // Initialize AudioSource component
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
     {
+        // If the mouse button is pressed down, grab the object
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Grab();
         }
 
+        // If the right mouse button is pressed down, release the object and freeze it if necessary
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             if (_grabbedObject)
@@ -52,6 +60,7 @@ public class PhysGun : MonoBehaviour
             }
         }
 
+        // If the left mouse button is released, release the object
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             if (_grabbedObject)
@@ -60,6 +69,7 @@ public class PhysGun : MonoBehaviour
             }
         }
 
+        // Adjust the grabbing distance with the mouse scroll wheel
         _pickDistance = Mathf.Clamp(_pickDistance + Input.mouseScrollDelta.y, _minGrabDistance, _maxGrabDistance);
     }
 
@@ -87,6 +97,7 @@ public class PhysGun : MonoBehaviour
 
     private void Grab()
     {
+        // Cast a ray from the camera to see if there is an object within range
         var ray = Camera.main.ViewportPointToRay(Vector3.one * 0.5f);
         if (Physics.Raycast(ray, out RaycastHit hit, _maxGrabDistance, ~0) && hit.rigidbody != null)
         {
@@ -98,6 +109,17 @@ public class PhysGun : MonoBehaviour
             _grabbedObject.freezeRotation = true;
             _grabbedObject.isKinematic = false;
             _pickLine.gameObject.SetActive(true);
+
+            // Play grab sound when an object is successfully grabbed (if not already playing)
+            if (audioSource != null && grabSound != null)
+            {
+                audioSource.clip = grabSound;
+                audioSource.loop = true;  // Set to loop while grabbing
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.Play();  // Start playing if not already playing
+                }
+            }
         }
     }
 
@@ -121,8 +143,14 @@ public class PhysGun : MonoBehaviour
 
         _pickLine.gameObject.SetActive(false);
         _grabbedObject = null; // Clear the reference
-    }
 
+        // Stop grab sound when releasing the object
+        if (audioSource != null)
+        {
+            audioSource.loop = false;  // Disable looping
+            audioSource.Stop();  // Stop the sound
+        }
+    }
 
     void DrawQuadraticBezierCurve(LineRenderer line, Vector3 point0, Vector3 point1, Vector3 point2)
     {
